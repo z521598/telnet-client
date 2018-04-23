@@ -9,16 +9,18 @@ public class NetTelnet {
     private TelnetClient telnet = new TelnetClient();
     private InputStream in;
     private PrintStream out;
-    private char prompt = '$';
+    private char prompt = '>';
 
     // 普通用户结束
     public NetTelnet(String ip, int port, String user, String password) {
         try {
+            System.out.println("connecting");
             telnet.connect(ip, port);
             in = telnet.getInputStream();
             out = new PrintStream(telnet.getOutputStream());
             // 根据root用户设置结束符
-            this.prompt = user.equals("root") ? '#' : '$';
+            this.prompt = '>';
+            System.out.println("logining");
             login(user, password);
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,11 +31,16 @@ public class NetTelnet {
      * 登录 * * @param user * @param password
      */
     public void login(String user, String password) {
-        readUntil("login:");
+        System.out.println("readUntil(\"login:\")");
+        readUntil("Login:");
+        System.out.println("write(user);");
         write(user);
+        System.out.println("readUntil(\"Password:\");");
         readUntil("Password:");
+        System.out.println("write(password);");
         write(password);
-        readUntil(prompt + " ");
+        System.out.println("readUntil(prompt + \" \");");
+        readUntil(prompt + "");
     }
 
     /**
@@ -77,7 +84,7 @@ public class NetTelnet {
     public String sendCommand(String command) {
         try {
             write(command);
-            return readUntil(prompt + " ");
+            return readUntil(prompt + "");
         } catch (Exception e) {
             e.printStackTrace();
         }

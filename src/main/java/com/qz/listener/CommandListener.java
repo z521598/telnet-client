@@ -62,6 +62,7 @@ public class CommandListener implements ActionListener {
                 }
             });
         } catch (final Exception ex) {
+            ex.printStackTrace();
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                     Toolkit.getDefaultToolkit().beep();
